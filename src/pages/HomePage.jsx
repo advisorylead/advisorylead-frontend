@@ -1,6 +1,47 @@
+import { useState } from 'react'
 import MarketingLayout from '../layouts/MarketingLayout'
+import { apiRequest } from '../lib/api'
+
 
 export default function HomePage() {
+  const [service, setService] = useState('HVAC')
+  const [zip, setZip] = useState('33068')
+  const [date, setDate] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  const [message, setMessage] = useState('')
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    setMessage('')
+    setSubmitting(true)
+
+    try {
+      await apiRequest('/jobs', {
+        method: 'POST',
+        body: JSON.stringify({
+          customer_name: 'Website lead',
+          customer_email: 'lead@advisorylead.com',
+          customer_phone: '0000000000',
+          service_type: service.toLowerCase(),
+          job_description: `Online request for ${service}`,
+          address_line1: '',
+          city: '',
+          state: '',
+          zip_code: zip,
+          preferred_date: date || null,
+          preferred_time_window: null,
+          source: 'website',
+        }),
+      })
+      setMessage('Request sent. We’ll match you to a contractor shortly.')
+      setDate('')
+    } catch (err) {
+      setMessage('Could not send request. Please try again.')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
   return (
     <MarketingLayout>
       <section className="hero">
@@ -12,21 +53,32 @@ export default function HomePage() {
               AdvisoryLead connects homeowners with approved local contractors, captures leads, routes requests,
               and keeps the booking process moving fast.
             </p>
-            <div className="form-strip">
+            <form className="form-strip" onSubmit={handleSubmit}>
               <div className="field">
                 <label>Service</label>
-                <select><option>HVAC</option><option>Roofing</option><option>Plumbing</option></select>
+                <select value={service} onChange={(e) => setService(e.target.value)}>
+                  <option>HVAC</option>
+                  <option>Roofing</option>
+                  <option>Plumbing</option>
+                </select>
               </div>
               <div className="field">
                 <label>Zip code</label>
-                <input placeholder="33068" />
+                <input value={zip} onChange={(e) => setZip(e.target.value)} />
               </div>
               <div className="field">
                 <label>Preferred date</label>
-                <input placeholder="MM/DD/YYYY" />
+                <input
+                  placeholder="MM/DD/YYYY"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                />
               </div>
-              <button className="btn btn-primary">Get matched fast</button>
-            </div>
+              <button className="btn btn-primary" type="submit" disabled={submitting}>
+                {submitting ? 'Sending...' : 'Get matched fast'}
+              </button>
+            </form>
+            {message && <p style={{ marginTop: 12 }}>{message}</p>}
           </div>
           <div className="dashboard-mini">
             <div className="card stat-card"><h3>5 min</h3><p>Average booking speed</p></div>
@@ -44,22 +96,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section" id="how-it-works">
-        <h2 className="section-title">How AdvisoryLead works</h2>
-        <div className="grid-3">
-          <div className="card feature-card"><h3>1. Capture</h3><p className="muted">Lead forms collect project details and save them into your backend.</p></div>
-          <div className="card feature-card"><h3>2. Match</h3><p className="muted">Approved contractors get matched by service area, service type, and availability.</p></div>
-          <div className="card feature-card"><h3>3. Book</h3><p className="muted">Bookings and confirmations run through one system.</p></div>
-        </div>
-      </section>
-
-      <footer className="card footer">
-        <div>
-          <div className="brand">Advisory<span>Lead</span></div>
-          <p className="muted">A modern lead-to-booking marketplace for home services.</p>
-        </div>
-        <button className="btn btn-primary">Book in 5 Minutes</button>
-      </footer>
+      {/* keep the rest of the sections as you have them */}
     </MarketingLayout>
   )
 }
