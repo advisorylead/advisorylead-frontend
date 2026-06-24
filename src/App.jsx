@@ -1,18 +1,31 @@
-import { Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import HomePage from './pages/HomePage'
-import ContractorPage from './pages/ContractorPage'
+import ContractorsPage from './pages/ContractorsPage'
 import AdminLoginPage from './pages/AdminLoginPage'
 import AdminDashboardPage from './pages/AdminDashboardPage'
-import ContractorDashboardPage from './pages/ContractorDashboardPage'
+import './styles.css'
+
+function ProtectedAdminRoute({ children }) {
+  const token = localStorage.getItem('adminToken')
+  return token ? children : <Navigate to="/admin/login" replace />
+}
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/for-contractors" element={<ContractorPage />} />
-      <Route path="/admin/login" element={<AdminLoginPage />} />
-      <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
-      <Route path="/portal" element={<ContractorDashboardPage />} />
-    </Routes>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/contractors" element={<ContractorsPage />} />
+        <Route path="/admin/login" element={<AdminLoginPage />} />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboardPage />
+            </ProtectedAdminRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   )
 }
