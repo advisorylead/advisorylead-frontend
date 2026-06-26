@@ -1,15 +1,17 @@
 const API_BASE = import.meta.env.VITE_API_BASE || '/api'
 
 export async function apiRequest(path, options = {}) {
-  const token = localStorage.getItem('adminToken')
+  const token =
+    localStorage.getItem('adminToken') ||
+    localStorage.getItem('contractorToken')
 
   const res = await fetch(`${API_BASE}${path}`, {
+    ...options,
     headers: {
       'Content-Type': 'application/json',
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(options.headers || {}),
     },
-    ...options,
   })
 
   if (!res.ok) {
@@ -18,6 +20,7 @@ export async function apiRequest(path, options = {}) {
   }
 
   const contentType = res.headers.get('content-type') || ''
+
   if (contentType.includes('application/json')) {
     return res.json()
   }

@@ -1,4 +1,6 @@
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { apiRequest } from '../lib/api'
 
 const homeownerServices = [
   'HVAC',
@@ -40,6 +42,81 @@ const serviceCards = [
 ]
 
 export default function HomePage() {
+  const [form, setForm] = useState({
+    customer_name: '',
+    customer_email: '',
+    customer_phone: '',
+    service_type: 'HVAC',
+    job_type: '',
+    address: '',
+    city: '',
+    state: '',
+    zip_code: '',
+    preferred_date: '',
+    preferred_time: '',
+    description: '',
+  })
+
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [job, setJob] = useState(null)
+  const [matches, setMatches] = useState([])
+  const [selectedContractor, setSelectedContractor] = useState(null)
+
+  const hasMatches = useMemo(() => matches.length > 0, [matches])
+
+  function updateField(event) {
+    const { name, value } = event.target
+    setForm((prev) => ({ ...prev, [name]: value }))
+  }
+
+  async function handleMatchSubmit(event) {
+    event.preventDefault()
+    setIsLoading(true)
+    setError('')
+    setMatches([])
+    setSelectedContractor(null)
+
+    try {
+      const created = await apiRequest('/jobs', {
+        method: 'POST',
+        body: JSON.stringify(form),
+      })
+
+      setJob(created.job)
+
+      const matched = await apiRequest(`/jobs/${created.job.id}/match`, {
+        method: 'POST',
+      })
+
+      setMatches(matched.contractors || [])
+    } catch (err) {
+      setError(err.message || 'Something went wrong while matching your request.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  async function handleSelectContractor(contractor) {
+    if (!job?.id) return
+
+    setIsLoading(true)
+    setError('')
+
+    try {
+      const selected = await apiRequest(`/jobs/${job.id}/select-contractor`, {
+        method: 'POST',
+        body: JSON.stringify({ contractor_id: contractor.id }),
+      })
+
+      setSelectedContractor(selected.contractor)
+    } catch (err) {
+      setError(err.message || 'Failed to select contractor.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
     <div className="marketing-page">
       <header className="site-header">
@@ -47,7 +124,6 @@ export default function HomePage() {
           <Link to="/" className="site-logo">
             Advisory<span>Lead</span>
           </Link>
-          
 
           <nav className="site-links">
             <a href="#services">Services</a>
@@ -85,35 +161,115 @@ export default function HomePage() {
               ))}
             </div>
 
-            <form className="hero-form">
+            <form className="hero-form" onSubmit={handleMatchSubmit}>
               <div className="hero-form-grid">
                 <label className="hero-field">
                   <span>Service needed</span>
-                  <select defaultValue="HVAC">
+                  <select name="service_type" value={form.service_type} onChange={updateField}>
                     {homeownerServices.map((service) => (
-                      <option key={service}>{service}</option>
+                      <option key={service} value={service}>
+                        {service}
+                      </option>
                     ))}
                   </select>
                 </label>
 
                 <label className="hero-field">
                   <span>Zip code</span>
-                  <input type="text" placeholder="Enter zip code" />
+                  <input
+                    name="zip_code"
+                    type="text"
+                    placeholder="Enter zip code"
+                    value={form.zip_code}
+                    onChange={updateField}
+                  />
                 </label>
 
                 <label className="hero-field">
                   <span>Preferred date</span>
-                  <input type="text" placeholder="MM/DD/YYYY" />
+                  <input
+                    name="preferred_date"
+                    type="text"
+                    placeholder="MM/DD/YYYY"
+                    value={form.preferred_date}
+                    onChange={updateField}
+                  />
+                </label>
+              </div>
+
+              <div className="hero-form-grid hero-form-grid--details">
+                <label className="hero-field hero-field--full">
+                  <span>Describe the job</span>
+                  <textarea
+                    name="description"
+                    placeholder="Tell us what is going on, what kind of help you need, and anything urgent."
+                    value={form.description}
+                    onChange={updateField}
+                    rows={4}
+                  />
                 </label>
               </div>
 
               <div className="hero-form-actions">
-                <button type="button" className="site-primary-btn">
-                  Get matched now
+                <button type="submit" className="site-primary-btn" disabled={isLoading}>
+                  {isLoading ? 'Matching...' : 'Get matched now'}
                 </button>
                 <p>No long forms. Start your request and book faster with a streamlined flow.</p>
               </div>
+
+              {error ? <p className="hero-status hero-status--error">{error}</p> : null}
             </form>
+
+            {hasMatches ? (
+              <section className="match-results">
+                <div className="match-results-heading">
+                  <span className="section-kicker">Top matches</span>
+                  <h3>Choose a contractor to continue to booking.</h3>
+                </div>
+
+                <div className="match-results-grid">
+                  {matches.map((contractor) => (
+                    <article key={contractor.id} className="glass-card match-card">
+                      <h4>{contractor.company_name || contractor.contact_name}</h4>
+                      <p>{contractor.contact_name || 'Approved local contractor'}</p>
+                      <p>{contractor.email}</p>
+                      <p>{contractor.phone}</p>
+                      <button
+                        type="button"
+                        className="site-primary-btn"
+                        onClick={() => handleSelectContractor(contractor)}
+                        disabled={isLoading}
+                      >
+                        Select contractor
+                      </button>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
+            {selectedContractor ? (
+              <section className="booking-panel glass-card">
+                <span className="section-kicker">Booking</span>
+                <h3>{selectedContractor.company_name || selectedContractor.contact_name}</h3>
+                <p>Use the booking link below to choose an available appointment.</p>
+
+                {selectedContractor.cal_booking_url ? (
+                  <a
+                    href={selectedContractor.cal_booking_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="site-primary-btn"
+                  >
+                    Open booking calendar
+                  </a>
+                ) : (
+                  <p className="hero-status hero-status--error">
+                    No Cal.com booking URL is set for this contractor yet.
+                  </p>
+                )}
+              </section>
+            ) : null}
           </div>
 
           <aside className="hero-visual-panel">
@@ -143,7 +299,7 @@ export default function HomePage() {
                   </div>
                   <div className="hero-chart-card">
                     <span>Available contractors</span>
-                    <strong>14 nearby</strong>
+                    <strong>{hasMatches ? matches.length : 14} nearby</strong>
                   </div>
                 </div>
 
