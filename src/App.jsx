@@ -3,11 +3,22 @@ import HomePage from './pages/HomePage'
 import ContractorsPage from './pages/ContractorsPage'
 import AdminLoginPage from './pages/AdminLoginPage'
 import AdminDashboardPage from './pages/AdminDashboardPage'
+import ContractorDashboardPage from './pages/ContractorDashboardPage'
+import ContractorLayout from './layouts/ContractorLayout'
 import './styles.css'
 
 function ProtectedAdminRoute({ children }) {
   const token = localStorage.getItem('adminToken')
   return token ? children : <Navigate to="/admin/login" replace />
+}
+
+function ProtectedContractorRoute({ children }) {
+  const token = localStorage.getItem('contractorToken')
+  return token ? children : <Navigate to="/" replace />
+}
+
+function PlaceholderPage({ title }) {
+  return <div>{title}</div>
 }
 
 export default function App() {
@@ -17,6 +28,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/contractors" element={<ContractorsPage />} />
         <Route path="/admin/login" element={<AdminLoginPage />} />
+
         <Route
           path="/admin/dashboard"
           element={
@@ -25,6 +37,25 @@ export default function App() {
             </ProtectedAdminRoute>
           }
         />
+
+        <Route
+          path="/contractor"
+          element={
+            <ProtectedContractorRoute>
+              <ContractorLayout />
+            </ProtectedContractorRoute>
+          }
+        >
+          <Route index element={<ContractorDashboardPage />} />
+          <Route path="profile" element={<PlaceholderPage title="Profile" />} />
+          <Route path="services" element={<PlaceholderPage title="Services" />} />
+          <Route path="coverage" element={<PlaceholderPage title="Coverage" />} />
+          <Route path="availability" element={<PlaceholderPage title="Availability" />} />
+          <Route path="jobs" element={<PlaceholderPage title="Incoming Jobs" />} />
+          <Route path="bookings" element={<PlaceholderPage title="Bookings" />} />
+          <Route path="payouts" element={<PlaceholderPage title="Payouts" />} />
+          <Route path="settings" element={<PlaceholderPage title="Settings" />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   )
