@@ -4,6 +4,7 @@ import { apiRequest } from '../lib/api'
 export default function AdminDashboardPage() {
   const [contractors, setContractors] = useState([])
   const [loading, setLoading] = useState(true)
+  const [actionLoadingId, setActionLoadingId] = useState('')
   const [error, setError] = useState('')
 
   function handleLogout() {
@@ -25,6 +26,48 @@ export default function AdminDashboardPage() {
 
     loadDashboard()
   }, [])
+
+  async function handleApprove(contractorId) {
+    setError('')
+    setActionLoadingId(contractorId)
+
+    try {
+      const data = await apiRequest(`/contractors/${contractorId}/approve`, {
+        method: 'PATCH',
+      })
+
+      setContractors((prev) =>
+        prev.map((contractor) =>
+          contractor.id === contractorId ? data.contractor : contractor
+        )
+      )
+    } catch (err) {
+      setError(err.message || 'Failed to approve contractor')
+    } finally {
+      setActionLoadingId('')
+    }
+  }
+
+  async function handleReject(contractorId) {
+    setError('')
+    setActionLoadingId(contractorId)
+
+    try {
+      const data = await apiRequest(`/contractors/${contractorId}/reject`, {
+        method: 'PATCH',
+      })
+
+      setContractors((prev) =>
+        prev.map((contractor) =>
+          contractor.id === contractorId ? data.contractor : contractor
+        )
+      )
+    } catch (err) {
+      setError(err.message || 'Failed to reject contractor')
+    } finally {
+      setActionLoadingId('')
+    }
+  }
 
   const pendingContractors = contractors.filter(
     (contractor) => contractor.onboarding_status === 'pending'
@@ -85,7 +128,7 @@ export default function AdminDashboardPage() {
           </section>
 
           <section className="admin-grid">
-            <article className="panel panel-large">
+            <article className="panel panel-large" id="contractors">
               <p className="panel-label">Recent activity</p>
               <h3>Contractor applications</h3>
 
@@ -99,21 +142,64 @@ export default function AdminDashboardPage() {
                     <div
                       key={contractor.id}
                       style={{
-                        padding: '12px',
+                        padding: '16px',
                         border: '1px solid rgba(15, 23, 42, 0.08)',
                         borderRadius: '12px',
                         background: '#fff',
                       }}
                     >
                       <strong>{contractor.company_name}</strong>
+
                       <p style={{ margin: '6px 0' }}>
                         {contractor.contact_name || 'No contact'} • {contractor.email || 'No email'}
                       </p>
+
                       <p style={{ margin: '6px 0' }}>
                         Status: {contractor.onboarding_status || 'pending'} • Approved:{' '}
                         {contractor.is_approved ? 'Yes' : 'No'}
                       </p>
-                      <p style={{ margin: 0 }}>{contractor.notes || 'No notes provided'}</p>
+
+                      <p style={{ margin: '6px 0 0' }}>
+                        {contractor.notes || 'No notes provided'}
+                      </p>
+
+                      {contractor.onboarding_status === 'pending' ? (
+                        <div style={{ display: 'flex', gap: '10px', marginTop: '14px' }}>
+                          <button
+                            type="button"
+                            onClick={() => handleApprove(contractor.id)}
+                            disabled={actionLoadingId === contractor.id}
+                            style={{
+                              padding: '10px 14px',
+                              borderRadius: '10px',
+                              border: 'none',
+                              background: '#16a34a',
+                              color: '#fff',
+                              cursor: 'pointer',
+                              opacity: actionLoadingId === contractor.id ? 0.7 : 1,
+                            }}
+                          >
+                            {actionLoadingId === contractor.id ? 'Saving...' : 'Approve'}
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => handleReject(contractor.id)}
+                            disabled={actionLoadingId === contractor.id}
+                            style={{
+                              padding: '10px 14px',
+                              borderRadius: '10px',
+                              border: 'none',
+                              background: '#dc2626',
+                              color: '#fff',
+                              cursor: 'pointer',
+                              opacity: actionLoadingId === contractor.id ? 0.7 : 1,
+                            }}
+                          >
+                            {actionLoadingId === contractor.id ? 'Saving...' : 'Reject'}
+                          </button>
+                        </div>
+                      ) : null}
                     </div>
                   ))}
                 </div>
