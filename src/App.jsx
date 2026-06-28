@@ -48,7 +48,8 @@ export default function App() {
             </ProtectedContractorRoute>
           }
         >
-          <Route index element={<ContractorDashboardPage />} />
+          <Route index element={<Navigate to="dashboard" replace />} />
+          <Route path="dashboard" element={<ContractorDashboardPage />} />
           <Route path="profile" element={<PlaceholderPage title="Profile" />} />
           <Route path="services" element={<PlaceholderPage title="Services" />} />
           <Route path="coverage" element={<PlaceholderPage title="Coverage" />} />
