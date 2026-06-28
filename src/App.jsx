@@ -3,11 +3,9 @@ import HomePage from './pages/HomePage'
 import ContractorsPage from './pages/ContractorsPage'
 import AdminLoginPage from './pages/AdminLoginPage'
 import AdminDashboardPage from './pages/AdminDashboardPage'
-import ContractorDashboardPage from './pages/ContractorDashboardPage'
 import ContractorLayout from './layouts/ContractorLayout'
 import ContractorLoginPage from './pages/ContractorLoginPage'
 import ContractorDashboardPage from './pages/ContractorDashboardPage'
-import ContractorProtectedRoute from './component/dashboard/ContractorProtectedRoute'
 import './styles.css'
 
 function ProtectedAdminRoute({ children }) {
@@ -50,7 +48,6 @@ export default function App() {
             </ProtectedContractorRoute>
           }
         >
-
           <Route index element={<ContractorDashboardPage />} />
           <Route path="profile" element={<PlaceholderPage title="Profile" />} />
           <Route path="services" element={<PlaceholderPage title="Services" />} />
