@@ -5,6 +5,9 @@ import AdminLoginPage from './pages/AdminLoginPage'
 import AdminDashboardPage from './pages/AdminDashboardPage'
 import ContractorDashboardPage from './pages/ContractorDashboardPage'
 import ContractorLayout from './layouts/ContractorLayout'
+import ContractorLoginPage from './pages/ContractorLoginPage'
+import ContractorDashboardPage from './pages/ContractorDashboardPage'
+import ContractorProtectedRoute from './components/ContractorProtectedRoute'
 import './styles.css'
 
 function ProtectedAdminRoute({ children }) {
@@ -14,7 +17,7 @@ function ProtectedAdminRoute({ children }) {
 
 function ProtectedContractorRoute({ children }) {
   const token = localStorage.getItem('contractorToken')
-  return token ? children : <Navigate to="/" replace />
+  return token ? children : <Navigate to="/contractor/login" replace />
 }
 
 function PlaceholderPage({ title }) {
@@ -28,6 +31,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/contractors" element={<ContractorsPage />} />
         <Route path="/admin/login" element={<AdminLoginPage />} />
+        <Route path="/contractor/login" element={<ContractorLoginPage />} />
 
         <Route
           path="/admin/dashboard"
@@ -46,6 +50,7 @@ export default function App() {
             </ProtectedContractorRoute>
           }
         >
+
           <Route index element={<ContractorDashboardPage />} />
           <Route path="profile" element={<PlaceholderPage title="Profile" />} />
           <Route path="services" element={<PlaceholderPage title="Services" />} />
