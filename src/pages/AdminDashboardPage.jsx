@@ -73,6 +73,10 @@ export default function AdminDashboardPage() {
     (contractor) => contractor.onboarding_status === 'pending'
   )
 
+  const approvedContractors = contractors.filter(
+    (contractor) => contractor.is_approved === true
+  )
+
   return (
     <div className="admin-dashboard-page">
       <div className="admin-shell">
@@ -109,14 +113,14 @@ export default function AdminDashboardPage() {
 
           <section className="admin-stats">
             <article className="panel stat-panel">
-              <p>Total jobs</p>
-              <h2>0</h2>
-              <span>Homeowner requests received</span>
+              <p>Total applications</p>
+              <h2>{contractors.length}</h2>
+              <span>Contractor records received</span>
             </article>
 
             <article className="panel stat-panel">
               <p>Contractors</p>
-              <h2>{contractors.length}</h2>
+              <h2>{approvedContractors.length}</h2>
               <span>Available in network</span>
             </article>
 
