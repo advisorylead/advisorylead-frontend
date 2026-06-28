@@ -1,8 +1,34 @@
+import { useEffect, useState } from 'react'
+import { apiRequest } from '../lib/api'
+
 export default function AdminDashboardPage() {
+  const [contractors, setContractors] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
   function handleLogout() {
     localStorage.removeItem('adminToken')
     window.location.href = '/admin/login'
   }
+
+  useEffect(() => {
+    async function loadDashboard() {
+      try {
+        const data = await apiRequest('/contractors')
+        setContractors(data.contractors || [])
+      } catch (err) {
+        setError(err.message || 'Failed to load contractors')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadDashboard()
+  }, [])
+
+  const pendingContractors = contractors.filter(
+    (contractor) => contractor.onboarding_status === 'pending'
+  )
 
   return (
     <div className="admin-dashboard-page">
@@ -36,6 +62,8 @@ export default function AdminDashboardPage() {
             <div className="admin-status-pill">Live backend connected</div>
           </div>
 
+          {error ? <p className="admin-login-error">{error}</p> : null}
+
           <section className="admin-stats">
             <article className="panel stat-panel">
               <p>Total jobs</p>
@@ -45,30 +73,61 @@ export default function AdminDashboardPage() {
 
             <article className="panel stat-panel">
               <p>Contractors</p>
-              <h2>0</h2>
+              <h2>{contractors.length}</h2>
               <span>Available in network</span>
             </article>
 
             <article className="panel stat-panel">
-              <p>Bookings</p>
-              <h2>0</h2>
-              <span>Confirmed jobs tracked</span>
+              <p>Pending applications</p>
+              <h2>{pendingContractors.length}</h2>
+              <span>Awaiting review</span>
             </article>
           </section>
 
           <section className="admin-grid">
             <article className="panel panel-large">
               <p className="panel-label">Recent activity</p>
-              <h3>Recent jobs</h3>
-              <p className="panel-copy">
-                No jobs yet. New homeowner form submissions will appear here.
-              </p>
+              <h3>Contractor applications</h3>
+
+              {loading ? (
+                <p className="panel-copy">Loading contractors...</p>
+              ) : contractors.length === 0 ? (
+                <p className="panel-copy">No contractors loaded yet.</p>
+              ) : (
+                <div style={{ display: 'grid', gap: '12px', marginTop: '16px' }}>
+                  {contractors.map((contractor) => (
+                    <div
+                      key={contractor.id}
+                      style={{
+                        padding: '12px',
+                        border: '1px solid rgba(15, 23, 42, 0.08)',
+                        borderRadius: '12px',
+                        background: '#fff',
+                      }}
+                    >
+                      <strong>{contractor.company_name}</strong>
+                      <p style={{ margin: '6px 0' }}>
+                        {contractor.contact_name || 'No contact'} • {contractor.email || 'No email'}
+                      </p>
+                      <p style={{ margin: '6px 0' }}>
+                        Status: {contractor.onboarding_status || 'pending'} • Approved:{' '}
+                        {contractor.is_approved ? 'Yes' : 'No'}
+                      </p>
+                      <p style={{ margin: 0 }}>{contractor.notes || 'No notes provided'}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
             </article>
 
             <article className="panel">
               <p className="panel-label">Network</p>
-              <h3>Contractors</h3>
-              <p className="panel-copy">No contractors loaded yet.</p>
+              <h3>Pending contractors</h3>
+              <p className="panel-copy">
+                {pendingContractors.length > 0
+                  ? `${pendingContractors.length} contractor application(s) awaiting review.`
+                  : 'No pending contractor applications.'}
+              </p>
             </article>
 
             <article className="panel">
