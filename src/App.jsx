@@ -7,7 +7,7 @@ import ContractorDashboardPage from './pages/ContractorDashboardPage'
 import ContractorLayout from './layouts/ContractorLayout'
 import ContractorLoginPage from './pages/ContractorLoginPage'
 import ContractorDashboardPage from './pages/ContractorDashboardPage'
-import ContractorProtectedRoute from './components/ContractorProtectedRoute'
+import ContractorProtectedRoute from './component/dashboard/ContractorProtectedRoute'
 import './styles.css'
 
 function ProtectedAdminRoute({ children }) {
