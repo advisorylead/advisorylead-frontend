@@ -3,11 +3,11 @@
 :root {
   --bg: #eef2ff;
   --bg-soft: #f8faff;
-  --surface: rgba(255, 255, 255, 0.78);
-  --surface-strong: rgba(255, 255, 255, 0.92);
+  --surface: rgba(255, 255, 255, 0.9);
+  --surface-strong: rgba(255, 255, 255, 0.97);
   --border: rgba(214, 223, 241, 0.96);
-  --text: #0b1220;
-  --muted: #5d6980;
+  --text: #111827;
+  --muted: #4b5563;
   --primary: #5b5cf0;
   --primary-dark: #0b1022;
   --accent: #7f8cff;
@@ -87,9 +87,13 @@ textarea {
   display: flex;
   align-items: center;
   gap: 30px;
-  color: #59657c;
+  color: #374151;
   font-size: 15px;
   font-weight: 500;
+}
+
+.site-links a:hover {
+  color: #111827;
 }
 
 .site-actions {
@@ -153,8 +157,8 @@ textarea {
 .glass-card,
 .cta-banner,
 .contractor-form-card {
-  border: 1px solid rgba(255, 255, 255, 0.84);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.83), rgba(255, 255, 255, 0.72));
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 255, 0.92));
   box-shadow: var(--shadow);
   backdrop-filter: blur(18px);
 }
@@ -191,6 +195,7 @@ textarea {
   font-size: clamp(56px, 6vw, 88px);
   line-height: 0.95;
   letter-spacing: -0.07em;
+  color: #111827;
 }
 
 .hero-copy {
@@ -479,6 +484,7 @@ textarea {
   font-size: clamp(34px, 4vw, 52px);
   line-height: 1;
   letter-spacing: -0.05em;
+  color: #111827;
 }
 
 .service-section,
@@ -499,10 +505,11 @@ textarea {
 }
 
 .service-card h3,
-.step-card h3 {
-  margin: 18px 0 10px;
-  font-size: 24px;
-  letter-spacing: -0.03em;
+.step-card h3,
+.hero-float-card strong,
+.hero-device h3,
+.admin-dashboard-page .panel h3 {
+  color: #111827;
 }
 
 .service-card p,
