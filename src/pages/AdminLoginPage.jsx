@@ -17,7 +17,7 @@ export default function AdminLoginPage() {
     try {
       const data = await apiRequest('/admin/login', {
         method: 'POST',
-        body: JSON.stringify({ email: 'aliarif2811@gmail.com', password: 'Ar!FAl!1932!@' }),
+        body: JSON.stringify({ email, password }),
       })
 
       if (data?.token) {

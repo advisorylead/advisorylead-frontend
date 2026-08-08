@@ -3,8 +3,8 @@
 :root {
   --bg: #eef2ff;
   --bg-soft: #f8faff;
-  --surface: rgba(255, 255, 255, 0.9);
-  --surface-strong: rgba(255, 255, 255, 0.97);
+  --surface: rgba(255, 255, 255, 0.92);
+  --surface-strong: rgba(255, 255, 255, 0.98);
   --border: rgba(214, 223, 241, 0.96);
   --text: #111827;
   --muted: #4b5563;
