@@ -1,22 +1,91 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --bg: #eef2ff;
-  --bg-soft: #f8faff;
-  --surface: rgba(255, 255, 255, 0.92);
-  --surface-strong: rgba(255, 255, 255, 0.98);
-  --border: rgba(214, 223, 241, 0.96);
-  --text: #111827;
-  --muted: #4b5563;
-  --primary: #5b5cf0;
-  --primary-dark: #0b1022;
-  --accent: #7f8cff;
-  --teal: #59c7d9;
-  --shadow: 0 28px 80px rgba(18, 29, 61, 0.12);
-  --shadow-soft: 0 18px 50px rgba(18, 29, 61, 0.1);
+  color-scheme: light;
+
+  --bg: #f3f6fb;
+  --bg-soft: #edf2f8;
+  --surface: rgba(255, 255, 255, 0.96);
+  --surface-strong: rgba(255, 255, 255, 0.99);
+  --surface-muted: #eef3f8;
+  --border: #d6dee8;
+  --border-strong: #b8c4d3;
+
+  --text: #14202b;
+  --text-strong: #0f1720;
+  --muted: #4f6275;
+  --muted-strong: #344457;
+  --faint: #73859a;
+
+  --primary: #155eef;
+  --primary-dark: #0f1720;
+  --primary-hover: #004ecc;
+  --primary-soft: rgba(21, 94, 239, 0.1);
+
+  --accent: #0f766e;
+  --accent-soft: rgba(15, 118, 110, 0.1);
+  --teal: #0ea5a8;
+
+  --success: #18794e;
+  --warning: #9a6700;
+  --danger: #b42318;
+  --danger-soft: #fee4e2;
+
+  --shadow: 0 20px 50px rgba(15, 23, 42, 0.1);
+  --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.08);
+  --shadow-xs: 0 2px 8px rgba(15, 23, 42, 0.06);
+
+  --radius-sm: 14px;
+  --radius-md: 18px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-pill: 999px;
+
+  --container: 1380px;
+  --transition: 180ms ease;
 }
 
-* {
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    --bg: #0f1720;
+    --bg-soft: #16212d;
+    --surface: rgba(22, 32, 43, 0.94);
+    --surface-strong: rgba(26, 38, 50, 0.98);
+    --surface-muted: #1b2836;
+    --border: #2d3b4a;
+    --border-strong: #435366;
+
+    --text: #e8eef5;
+    --text-strong: #f8fbff;
+    --muted: #c3cfdb;
+    --muted-strong: #d7e0ea;
+    --faint: #93a5b8;
+
+    --primary: #5aa9ff;
+    --primary-dark: #e8eef5;
+    --primary-hover: #7abbff;
+    --primary-soft: rgba(90, 169, 255, 0.16);
+
+    --accent: #39b8ad;
+    --accent-soft: rgba(57, 184, 173, 0.16);
+    --teal: #43c6cb;
+
+    --success: #4ecb7a;
+    --warning: #ffb547;
+    --danger: #ff6b6b;
+    --danger-soft: rgba(255, 107, 107, 0.14);
+
+    --shadow: 0 20px 50px rgba(0, 0, 0, 0.32);
+    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.22);
+    --shadow-xs: 0 2px 8px rgba(0, 0, 0, 0.18);
+  }
+}
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -28,18 +97,29 @@ body,
   font-family: 'Inter', sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at 12% 10%, rgba(123, 97, 255, 0.16), transparent 18%),
-    radial-gradient(circle at 88% 16%, rgba(89, 199, 217, 0.18), transparent 20%),
-    linear-gradient(180deg, #f6f8ff 0%, #edf2ff 52%, #f7f9ff 100%);
+    radial-gradient(circle at 12% 10%, rgba(21, 94, 239, 0.08), transparent 18%),
+    radial-gradient(circle at 88% 16%, rgba(14, 165, 168, 0.08), transparent 20%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 52%, var(--bg) 100%);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
   overflow-x: hidden;
+  font-size: 16px;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
   text-decoration: none;
   color: inherit;
+  transition: color var(--transition);
 }
 
 button,
@@ -49,34 +129,85 @@ textarea {
   font: inherit;
 }
 
+button,
+input,
+select,
+textarea,
+a {
+  transition:
+    background-color var(--transition),
+    color var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition),
+    transform var(--transition);
+}
+
+button {
+  cursor: pointer;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  color: var(--text-strong);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+
+p {
+  color: var(--muted);
+}
+
+strong {
+  color: var(--text-strong);
+}
+
+:focus-visible {
+  outline: 3px solid var(--primary-soft);
+  outline-offset: 2px;
+}
+
 .marketing-page {
   min-height: 100vh;
   position: relative;
 }
 
 .site-header {
-  padding: 26px 30px 0;
+  padding: 24px 28px 0;
 }
 
 .site-nav {
-  max-width: 1380px;
+  max-width: var(--container);
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 22px;
-  padding: 18px 24px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.68);
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  padding: 16px 20px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(214, 222, 232, 0.92);
   box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(18px);
+  backdrop-filter: blur(16px);
 }
 
 .site-logo {
-  font-size: 22px;
+  font-size: 1.35rem;
   font-weight: 800;
   letter-spacing: -0.04em;
+  color: var(--text-strong);
 }
 
 .site-logo span {
@@ -86,14 +217,14 @@ textarea {
 .site-links {
   display: flex;
   align-items: center;
-  gap: 30px;
-  color: #374151;
-  font-size: 15px;
-  font-weight: 500;
+  gap: 28px;
+  color: var(--muted-strong);
+  font-size: 0.95rem;
+  font-weight: 600;
 }
 
 .site-links a:hover {
-  color: #111827;
+  color: var(--text-strong);
 }
 
 .site-actions {
@@ -108,13 +239,13 @@ textarea {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 54px;
-  padding: 0 24px;
-  border-radius: 999px;
-  font-size: 15px;
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: var(--radius-pill);
+  font-size: 0.94rem;
   font-weight: 700;
-  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .site-primary-btn:hover,
@@ -123,26 +254,37 @@ textarea {
 }
 
 .site-primary-btn {
-  background: linear-gradient(135deg, #6768ff 0%, #5457ee 50%, #53b7db 100%);
+  background: var(--primary);
   color: white;
-  box-shadow: 0 18px 36px rgba(91, 92, 240, 0.24);
+  box-shadow: 0 14px 28px rgba(21, 94, 239, 0.22);
+}
+
+.site-primary-btn:hover {
+  background: var(--primary-hover);
 }
 
 .site-primary-btn--dark {
-  background: #0b1022;
-  box-shadow: 0 18px 36px rgba(11, 16, 34, 0.18);
+  background: var(--primary-dark);
+  color: white;
+  box-shadow: 0 14px 28px rgba(15, 23, 32, 0.18);
 }
 
 .site-secondary-btn {
-  background: rgba(255, 255, 255, 0.76);
-  color: var(--text);
+  background: var(--surface);
+  color: var(--text-strong);
   border: 1px solid var(--border);
+  box-shadow: var(--shadow-xs);
+}
+
+.site-secondary-btn:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-strong);
 }
 
 .landing-shell {
-  max-width: 1380px;
+  max-width: var(--container);
   margin: 0 auto;
-  padding: 34px 30px 64px;
+  padding: 32px 28px 64px;
 }
 
 .hero-grid {
@@ -157,15 +299,15 @@ textarea {
 .glass-card,
 .cta-banner,
 .contractor-form-card {
-  border: 1px solid rgba(255, 255, 255, 0.92);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 255, 0.92));
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--surface-strong), var(--surface));
   box-shadow: var(--shadow);
-  backdrop-filter: blur(18px);
+  backdrop-filter: blur(14px);
 }
 
 .hero-copy-card {
-  border-radius: 36px;
-  padding: 42px;
+  border-radius: var(--radius-xl);
+  padding: 40px;
 }
 
 .hero-kicker,
@@ -173,10 +315,10 @@ textarea {
 .mini-label {
   display: inline-flex;
   align-items: center;
-  min-height: 38px;
+  min-height: 36px;
   padding: 0 14px;
-  border-radius: 999px;
-  font-size: 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.72rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.14em;
@@ -184,26 +326,26 @@ textarea {
 
 .hero-kicker,
 .section-kicker {
-  background: rgba(91, 92, 240, 0.1);
-  color: #5b5cf0;
+  background: var(--primary-soft);
+  color: var(--primary);
 }
 
 .hero-copy-card h1,
 .contractor-copy h1 {
-  margin: 22px 0 16px;
+  margin: 20px 0 16px;
   max-width: 720px;
-  font-size: clamp(56px, 6vw, 88px);
+  font-size: clamp(3rem, 5vw, 5.2rem);
   line-height: 0.95;
   letter-spacing: -0.07em;
-  color: #111827;
+  color: var(--text-strong);
 }
 
 .hero-copy {
   max-width: 700px;
   margin: 0;
   color: var(--muted);
-  font-size: 19px;
-  line-height: 1.65;
+  font-size: 1.05rem;
+  line-height: 1.72;
 }
 
 .hero-trust-row {
@@ -216,21 +358,22 @@ textarea {
 .hero-trust-pill {
   display: inline-flex;
   align-items: center;
-  min-height: 40px;
+  min-height: 38px;
   padding: 0 16px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
   border: 1px solid var(--border);
-  color: #44506a;
-  font-size: 14px;
+  color: var(--muted-strong);
+  font-size: 0.88rem;
   font-weight: 600;
+  box-shadow: var(--shadow-xs);
 }
 
 .hero-form {
   margin-top: 32px;
   padding: 18px;
-  border-radius: 30px;
-  background: rgba(255, 255, 255, 0.72);
+  border-radius: 28px;
+  background: var(--surface);
   border: 1px solid var(--border);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
@@ -247,22 +390,45 @@ textarea {
 }
 
 .hero-field span {
-  font-size: 13px;
+  font-size: 0.83rem;
   font-weight: 700;
-  color: #67758d;
+  color: var(--muted-strong);
 }
 
 .hero-field input,
 .hero-field select,
-.hero-field textarea {
+.hero-field textarea,
+.admin-login-page .admin-login-form input {
   width: 100%;
   border: 1px solid var(--border);
-  border-radius: 20px;
-  background: rgba(248, 251, 255, 0.95);
-  min-height: 58px;
+  border-radius: 18px;
+  background: var(--surface-strong);
+  min-height: 54px;
   padding: 0 16px;
   color: var(--text);
   outline: none;
+  box-shadow: none;
+}
+
+.hero-field input::placeholder,
+.hero-field textarea::placeholder,
+.admin-login-page .admin-login-form input::placeholder {
+  color: var(--faint);
+}
+
+.hero-field input:hover,
+.hero-field select:hover,
+.hero-field textarea:hover,
+.admin-login-page .admin-login-form input:hover {
+  border-color: var(--border-strong);
+}
+
+.hero-field input:focus,
+.hero-field select:focus,
+.hero-field textarea:focus,
+.admin-login-page .admin-login-form input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-soft);
 }
 
 .hero-field textarea {
@@ -281,29 +447,29 @@ textarea {
 .hero-form-actions p {
   margin: 0;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 0.92rem;
   line-height: 1.6;
 }
 
 .hero-visual-panel {
   position: relative;
   overflow: hidden;
-  border-radius: 36px;
+  border-radius: var(--radius-xl);
   min-height: 720px;
   padding: 32px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
   background:
-    radial-gradient(circle at 78% 12%, rgba(110, 92, 255, 0.24), transparent 20%),
-    radial-gradient(circle at 20% 76%, rgba(89, 199, 217, 0.22), transparent 18%),
-    linear-gradient(180deg, rgba(255,255,255,0.7), rgba(241,244,255,0.82));
+    radial-gradient(circle at 78% 12%, rgba(21, 94, 239, 0.12), transparent 20%),
+    radial-gradient(circle at 20% 76%, rgba(14, 165, 168, 0.12), transparent 18%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(241, 244, 250, 0.88));
 }
 
 .hero-orb {
   position: absolute;
   border-radius: 999px;
-  filter: blur(10px);
+  filter: blur(12px);
 }
 
 .hero-orb-one {
@@ -311,7 +477,7 @@ textarea {
   height: 220px;
   top: 90px;
   right: 70px;
-  background: rgba(104, 95, 255, 0.18);
+  background: rgba(21, 94, 239, 0.12);
 }
 
 .hero-orb-two {
@@ -319,17 +485,17 @@ textarea {
   height: 180px;
   bottom: 120px;
   left: 48px;
-  background: rgba(89, 199, 217, 0.16);
+  background: rgba(14, 165, 168, 0.12);
 }
 
 .hero-device {
   position: relative;
   width: 100%;
   max-width: 540px;
-  border-radius: 34px;
+  border-radius: 30px;
   padding: 18px;
-  background: linear-gradient(180deg, #0f1330, #131937 54%, #1f2550 100%);
-  box-shadow: 0 38px 80px rgba(13, 19, 45, 0.28);
+  background: linear-gradient(180deg, #132033, #17273d 54%, #1d324f 100%);
+  box-shadow: 0 30px 70px rgba(15, 23, 42, 0.28);
   color: white;
   z-index: 2;
 }
@@ -352,23 +518,24 @@ textarea {
 
 .hero-device-badge {
   display: inline-flex;
-  min-height: 34px;
+  min-height: 32px;
   align-items: center;
   padding: 0 12px;
-  border-radius: 999px;
-  background: rgba(103, 104, 255, 0.18);
-  color: #dfe4ff;
-  font-size: 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(90, 169, 255, 0.18);
+  color: #dfeaff;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .hero-device h3 {
-  margin: 18px 0 18px;
-  font-size: 28px;
-  line-height: 1.05;
+  margin: 18px 0;
+  font-size: 1.75rem;
+  line-height: 1.08;
   letter-spacing: -0.04em;
+  color: white;
 }
 
 .hero-chart-row {
@@ -378,18 +545,18 @@ textarea {
 }
 
 .hero-chart-card {
-  border-radius: 24px;
+  border-radius: 22px;
   padding: 20px;
   background: rgba(255, 255, 255, 0.08);
 }
 
 .hero-chart-card--dark {
-  background: linear-gradient(180deg, rgba(99, 103, 255, 0.28), rgba(62, 82, 219, 0.18));
+  background: linear-gradient(180deg, rgba(90, 169, 255, 0.22), rgba(57, 184, 173, 0.14));
 }
 
 .hero-chart-card span {
   display: block;
-  font-size: 12px;
+  font-size: 0.72rem;
   color: rgba(225, 232, 255, 0.72);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -398,8 +565,9 @@ textarea {
 .hero-chart-card strong {
   display: block;
   margin-top: 10px;
-  font-size: 30px;
+  font-size: 1.9rem;
   letter-spacing: -0.04em;
+  color: white;
 }
 
 .hero-visual-rings {
@@ -413,9 +581,9 @@ textarea {
   left: 50%;
   transform: translateX(-50%);
   border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.22);
-  background: linear-gradient(180deg, rgba(115, 122, 255, 0.24), rgba(89, 199, 217, 0.16));
-  box-shadow: inset 0 14px 32px rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(180deg, rgba(90, 169, 255, 0.18), rgba(57, 184, 173, 0.12));
+  box-shadow: inset 0 14px 32px rgba(255, 255, 255, 0.08);
 }
 
 .hero-ring-lg {
@@ -440,25 +608,26 @@ textarea {
   position: absolute;
   z-index: 3;
   width: 240px;
-  border-radius: 26px;
+  border-radius: 24px;
   padding: 18px;
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(255,255,255,0.85);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--border);
   box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(16px);
 }
 
 .hero-float-card strong {
   display: block;
   margin-top: 10px;
-  font-size: 18px;
-  line-height: 1.2;
+  font-size: 1.05rem;
+  line-height: 1.25;
+  color: var(--text-strong);
 }
 
 .hero-float-card p {
   margin: 10px 0 0;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 0.9rem;
   line-height: 1.55;
 }
 
@@ -481,10 +650,10 @@ textarea {
 .cta-banner h2,
 .contractor-form-card h2 {
   margin: 16px 0 0;
-  font-size: clamp(34px, 4vw, 52px);
-  line-height: 1;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  line-height: 1.02;
   letter-spacing: -0.05em;
-  color: #111827;
+  color: var(--text-strong);
 }
 
 .service-section,
@@ -500,16 +669,15 @@ textarea {
 }
 
 .glass-card {
-  border-radius: 30px;
+  border-radius: 28px;
   padding: 28px;
 }
 
 .service-card h3,
 .step-card h3,
 .hero-float-card strong,
-.hero-device h3,
 .admin-dashboard-page .panel h3 {
-  color: #111827;
+  color: var(--text-strong);
 }
 
 .service-card p,
@@ -520,7 +688,7 @@ textarea {
 .form-success-card p {
   margin: 0;
   color: var(--muted);
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 1.7;
 }
 
@@ -531,15 +699,15 @@ textarea {
   align-items: center;
   justify-content: center;
   border-radius: 18px;
-  background: rgba(91, 92, 240, 0.12);
-  color: #5b5cf0;
-  font-size: 14px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 0.88rem;
   font-weight: 800;
 }
 
 .cta-banner {
   margin-top: 28px;
-  border-radius: 34px;
+  border-radius: var(--radius-xl);
   padding: 34px;
   display: flex;
   align-items: center;
@@ -581,8 +749,8 @@ textarea {
   gap: 14px;
   padding: 16px 18px;
   border-radius: 22px;
-  background: rgba(255, 255, 255, 0.56);
-  border: 1px solid rgba(255,255,255,0.78);
+  background: var(--surface);
+  border: 1px solid var(--border);
   box-shadow: var(--shadow-soft);
 }
 
@@ -590,13 +758,13 @@ textarea {
   width: 12px;
   height: 12px;
   border-radius: 999px;
-  background: linear-gradient(180deg, #6768ff, #53b7db);
-  box-shadow: 0 0 0 6px rgba(103, 104, 255, 0.12);
+  background: var(--primary);
+  box-shadow: 0 0 0 6px var(--primary-soft);
   flex-shrink: 0;
 }
 
 .contractor-form-card {
-  border-radius: 36px;
+  border-radius: var(--radius-xl);
   padding: 34px;
 }
 
@@ -627,7 +795,7 @@ textarea {
 .admin-login-page {
   min-height: 100vh;
   background:
-    linear-gradient(132deg, #071338 0%, #0b1b54 44%, #eef3f9 44%, #edf2f8 100%);
+    linear-gradient(132deg, #0f1b2c 0%, #16314c 44%, #eef3f8 44%, #edf2f8 100%);
 }
 
 .admin-login-page .admin-login-shell {
@@ -652,21 +820,22 @@ textarea {
   margin: 0 0 18px;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  font-size: 13px;
-  color: rgba(255,255,255,0.7);
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.72);
 }
 
 .admin-login-page .admin-login-brand-panel h1 {
   margin: 0 0 18px;
-  font-size: clamp(52px, 5vw, 78px);
+  font-size: clamp(3rem, 5vw, 4.9rem);
   line-height: 0.96;
   letter-spacing: -0.06em;
+  color: white;
 }
 
 .admin-login-page .admin-login-lead {
   margin: 0;
-  color: rgba(255,255,255,0.82);
-  font-size: 18px;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 1.06rem;
   line-height: 1.7;
 }
 
@@ -687,14 +856,14 @@ textarea {
   height: 10px;
   border-radius: 999px;
   flex-shrink: 0;
-  background: #60a5fa;
-  box-shadow: 0 0 0 6px rgba(96, 165, 250, 0.12);
+  background: #7cc4ff;
+  box-shadow: 0 0 0 6px rgba(124, 196, 255, 0.12);
 }
 
 .admin-login-page .admin-login-feature p {
   margin: 0;
-  color: rgba(255,255,255,0.86);
-  font-size: 15px;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.95rem;
 }
 
 .admin-login-page .admin-login-form-panel {
@@ -707,44 +876,46 @@ textarea {
 .admin-login-page .admin-login-card {
   width: 100%;
   max-width: 520px;
-  background: rgba(255,255,255,0.9);
-  border: 1px solid rgba(216, 224, 236, 0.94);
-  border-radius: 34px;
-  box-shadow: 0 26px 80px rgba(15, 23, 42, 0.16);
-  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.14);
+  backdrop-filter: blur(10px);
   padding: 40px;
 }
 
 .admin-login-page .admin-login-logo {
-  font-size: 28px;
+  font-size: 1.75rem;
   font-weight: 800;
   margin-bottom: 22px;
+  color: var(--text-strong);
 }
 
 .admin-login-page .admin-login-logo span {
-  color: #5b5cf0;
+  color: var(--primary);
 }
 
 .admin-login-page .admin-login-card-kicker {
   margin: 0 0 8px;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: #7a8798;
-  font-size: 12px;
+  color: var(--faint);
+  font-size: 0.72rem;
   font-weight: 700;
 }
 
 .admin-login-page .admin-login-card h2 {
   margin: 0;
-  font-size: 56px;
+  font-size: clamp(2.4rem, 4vw, 3.5rem);
   line-height: 0.98;
   letter-spacing: -0.05em;
+  color: var(--text-strong);
 }
 
 .admin-login-page .admin-login-copy {
   margin: 14px 0 0;
-  color: #64748b;
-  font-size: 17px;
+  color: var(--muted);
+  font-size: 1rem;
   line-height: 1.65;
 }
 
@@ -757,46 +928,42 @@ textarea {
 .admin-login-page .admin-login-form label {
   display: grid;
   gap: 8px;
-  font-size: 14px;
+  font-size: 0.9rem;
   font-weight: 700;
-}
-
-.admin-login-page .admin-login-form input {
-  width: 100%;
-  min-height: 56px;
-  border-radius: 18px;
-  border: 1px solid rgba(214, 223, 241, 0.96);
-  background: #f7faff;
-  padding: 0 18px;
-  font-size: 16px;
+  color: var(--text-strong);
 }
 
 .admin-login-page .admin-login-form button {
   margin-top: 6px;
-  min-height: 56px;
+  min-height: 54px;
   border: none;
   border-radius: 18px;
-  background: linear-gradient(135deg, #6768ff 0%, #5457ee 50%, #53b7db 100%);
+  background: var(--primary);
   color: white;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 20px 34px rgba(91, 92, 240, 0.24);
+  box-shadow: 0 16px 30px rgba(21, 94, 239, 0.24);
+}
+
+.admin-login-page .admin-login-form button:hover {
+  background: var(--primary-hover);
 }
 
 .admin-login-page .admin-login-error {
   margin: 0;
   padding: 12px 14px;
   border-radius: 14px;
-  background: #fee2e2;
-  color: #b91c1c;
-  font-size: 14px;
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
 .admin-dashboard-page {
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(91, 92, 240, 0.08), transparent 24%),
+    radial-gradient(circle at top left, rgba(21, 94, 239, 0.06), transparent 24%),
     linear-gradient(180deg, #f4f7fc 0%, #edf2f8 100%);
 }
 
@@ -807,7 +974,7 @@ textarea {
 }
 
 .admin-dashboard-page .admin-sidebar {
-  background: linear-gradient(180deg, #081338 0%, #0c1a4c 100%);
+  background: linear-gradient(180deg, #0f1b2c 0%, #14263f 100%);
   color: white;
   padding: 34px 22px;
   display: flex;
@@ -816,19 +983,20 @@ textarea {
 }
 
 .admin-dashboard-page .admin-brand {
-  font-size: 28px;
+  font-size: 1.75rem;
   font-weight: 800;
+  color: white;
 }
 
 .admin-dashboard-page .admin-brand span {
-  color: #60a5fa;
+  color: #7cc4ff;
 }
 
 .admin-dashboard-page .admin-sidebar-label {
   text-transform: uppercase;
   letter-spacing: 0.16em;
-  font-size: 13px;
-  color: rgba(255,255,255,0.68);
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .admin-dashboard-page .admin-nav {
@@ -842,12 +1010,17 @@ textarea {
   min-height: 48px;
   padding: 0 16px;
   border-radius: 16px;
-  color: rgba(255,255,255,0.84);
-  font-weight: 500;
+  color: rgba(255, 255, 255, 0.84);
+  font-weight: 600;
+}
+
+.admin-dashboard-page .admin-nav a:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
 }
 
 .admin-dashboard-page .admin-nav a.is-active {
-  background: rgba(255,255,255,0.12);
+  background: rgba(255, 255, 255, 0.14);
   color: white;
 }
 
@@ -856,11 +1029,15 @@ textarea {
   min-height: 48px;
   border: none;
   border-radius: 16px;
-  background: rgba(255,255,255,0.12);
+  background: rgba(255, 255, 255, 0.12);
   color: white;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
+}
+
+.admin-dashboard-page .admin-logout:hover {
+  background: rgba(255, 255, 255, 0.18);
 }
 
 .admin-dashboard-page .admin-main {
@@ -878,20 +1055,21 @@ textarea {
   margin: 0 0 10px;
   display: inline-flex;
   padding: 8px 14px;
-  border-radius: 999px;
-  background: rgba(91, 92, 240, 0.08);
-  color: #718096;
+  border-radius: var(--radius-pill);
+  background: var(--primary-soft);
+  color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  font-size: 12px;
+  font-size: 0.72rem;
   font-weight: 700;
 }
 
 .admin-dashboard-page .admin-topbar h1 {
   margin: 0;
-  font-size: 62px;
+  font-size: clamp(2.5rem, 5vw, 3.9rem);
   line-height: 0.96;
   letter-spacing: -0.06em;
+  color: var(--text-strong);
 }
 
 .admin-dashboard-page .admin-status-pill {
@@ -899,11 +1077,12 @@ textarea {
   align-items: center;
   min-height: 46px;
   padding: 0 18px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.82);
-  border: 1px solid rgba(214, 223, 241, 0.96);
-  color: #5b5cf0;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--primary);
   font-weight: 700;
+  box-shadow: var(--shadow-xs);
 }
 
 .admin-dashboard-page .admin-stats {
@@ -914,9 +1093,9 @@ textarea {
 }
 
 .admin-dashboard-page .panel {
-  background: rgba(255,255,255,0.84);
-  border: 1px solid rgba(214, 223, 241, 0.96);
-  border-radius: 30px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 28px;
   box-shadow: var(--shadow-soft);
   padding: 26px;
 }
@@ -924,23 +1103,24 @@ textarea {
 .admin-dashboard-page .stat-panel p,
 .admin-dashboard-page .panel-label {
   margin: 0 0 12px;
-  color: #95a0b2;
+  color: var(--faint);
   text-transform: uppercase;
   letter-spacing: 0.16em;
-  font-size: 12px;
+  font-size: 0.72rem;
   font-weight: 700;
 }
 
 .admin-dashboard-page .stat-panel h2 {
   margin: 0 0 10px;
-  font-size: 54px;
+  font-size: 3.2rem;
   line-height: 1;
+  color: var(--text-strong);
 }
 
 .admin-dashboard-page .stat-panel span,
 .admin-dashboard-page .panel-copy {
-  color: #64748b;
-  font-size: 16px;
+  color: var(--muted);
+  font-size: 1rem;
   line-height: 1.6;
 }
 
@@ -957,7 +1137,8 @@ textarea {
 
 .admin-dashboard-page .panel h3 {
   margin: 0 0 10px;
-  font-size: 24px;
+  font-size: 1.5rem;
+  color: var(--text-strong);
 }
 
 @media (max-width: 1180px) {
@@ -965,8 +1146,12 @@ textarea {
   .contractor-hero,
   .admin-login-page .admin-login-shell,
   .admin-dashboard-page .admin-shell,
-  .admin-dashboard-page .admin-grid,
+  .admin-dashboard-page .admin-grid {
+    grid-template-columns: 1fr;
+  }
+
   .cta-banner {
+    display: grid;
     grid-template-columns: 1fr;
   }
 
@@ -979,10 +1164,6 @@ textarea {
   .contractor-form-grid,
   .admin-dashboard-page .admin-stats {
     grid-template-columns: 1fr;
-  }
-
-  .cta-banner {
-    display: grid;
   }
 
   .hero-visual-panel {
@@ -1001,7 +1182,7 @@ textarea {
   }
 
   .site-nav {
-    border-radius: 32px;
+    border-radius: 28px;
     flex-direction: column;
     align-items: stretch;
   }
@@ -1019,14 +1200,14 @@ textarea {
   .contractor-form-card,
   .admin-login-page .admin-login-card {
     padding: 24px;
-    border-radius: 28px;
+    border-radius: 24px;
   }
 
   .hero-copy-card h1,
   .contractor-copy h1,
   .admin-login-page .admin-login-brand-panel h1,
   .admin-dashboard-page .admin-topbar h1 {
-    font-size: 42px;
+    font-size: 2.6rem;
   }
 
   .service-grid,
@@ -1048,5 +1229,41 @@ textarea {
     position: static;
     width: 100%;
     margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .site-primary-btn,
+  .site-secondary-btn,
+  .admin-login-page .admin-login-form button {
+    width: 100%;
+  }
+
+  .hero-copy {
+    font-size: 1rem;
+  }
+
+  .section-heading h2,
+  .cta-banner h2,
+  .contractor-form-card h2 {
+    font-size: 2rem;
+  }
+
+  .admin-dashboard-page .stat-panel h2 {
+    font-size: 2.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
